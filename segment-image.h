@@ -25,7 +25,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #include <filter.h>
 #include "segment-graph.h"
 
-float w[4] = {0.25, 0.25, 0.25, 1};  // weight matrix for r,g,b,d respectively.
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+float w[4] = {0.1, 0.1, 0.1, 0.8};  // weight matrix for r,g,b,d respectively.
 
 // random color
 rgb random_rgb(){ 
@@ -161,6 +165,20 @@ image<rgb> *segment_image(image<rgb> *im, image<uchar> *depth, float sigma, floa
       imRef(output, x, y) = colors[comp];
     }
   }  
+  // Write to file
+  ofstream myfile;
+  myfile.open("universe.dat");
+
+  for (int i = 0; i < width*height; i++) {
+	  int comp = u->find(i);
+	  myfile << comp;
+	  if ((i + 1) % width == 0)
+		  myfile << endl;
+	  else
+		  myfile << ", ";
+  }
+
+  myfile.close();
 
   delete [] colors;  
   delete u;
